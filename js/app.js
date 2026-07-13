@@ -1,3 +1,5 @@
+let responses = {};
+
 const loginBtn = document.getElementById("loginBtn");
 
 if(loginBtn){
@@ -63,56 +65,46 @@ window.location.href="exam.html";
 }
 const questionsContainer = document.getElementById("questionsContainer");
 
-if(questionsContainer){
+if (questionsContainer) {
 
     document.getElementById("examTitle").innerHTML = exam.title;
 
     document.getElementById("examSubject").innerHTML = exam.subject;
 
-    exam.questions.forEach((question,index)=>{
+    exam.questions.forEach((question, index) => {
+
+        responses[question.id] = {
+            answer: null
+        };
 
         let card = document.createElement("div");
 
         card.className = "questionCard";
 
-        card.innerHTML =
+        card.innerHTML = `
 
-        `
-
-        <h3>Question ${index+1}</h3>
+        <h3>Question ${index + 1}</h3>
 
         <p>${question.question}</p>
 
         <label>
-
-        <input type="radio" name="q${question.id}" value="A">
-
-        A. ${question.options[0]}
-
-        </label><br>
+            <input type="radio" name="q${question.id}" value="A">
+            A. ${question.options[0]}
+        </label>
 
         <label>
-
-        <input type="radio" name="q${question.id}" value="B">
-
-        B. ${question.options[1]}
-
-        </label><br>
+            <input type="radio" name="q${question.id}" value="B">
+            B. ${question.options[1]}
+        </label>
 
         <label>
-
-        <input type="radio" name="q${question.id}" value="C">
-
-        C. ${question.options[2]}
-
-        </label><br>
+            <input type="radio" name="q${question.id}" value="C">
+            C. ${question.options[2]}
+        </label>
 
         <label>
-
-        <input type="radio" name="q${question.id}" value="D">
-
-        D. ${question.options[3]}
-
+            <input type="radio" name="q${question.id}" value="D">
+            D. ${question.options[3]}
         </label>
 
         <hr>
@@ -122,5 +114,82 @@ if(questionsContainer){
         questionsContainer.appendChild(card);
 
     });
+
+    document.querySelectorAll("input[type='radio']").forEach(radio => {
+
+        radio.addEventListener("change", function () {
+
+            const questionId = Number(this.name.replace("q", ""));
+
+            responses[questionId].answer = this.value;
+
+            console.log(responses);
+
+        });
+
+    });
+
+}
+const submitBtn = document.getElementById("submitBtn");
+
+if (submitBtn) {
+
+    submitBtn.addEventListener("click", function () {
+
+        let score = 0;
+        let correct = 0;
+        let wrong = 0;
+        let notAttempted = 0;
+
+        exam.questions.forEach(question => {
+
+            const studentAnswer = responses[question.id].answer;
+
+            if (studentAnswer === null) {
+
+                notAttempted++;
+
+            }
+
+            else if (studentAnswer === question.answer) {
+
+                correct++;
+
+                score += 4;
+
+            }
+
+            else {
+
+                wrong++;
+
+            }
+
+        });
+
+        localStorage.setItem("score", score);
+        localStorage.setItem("correct", correct);
+        localStorage.setItem("wrong", wrong);
+        localStorage.setItem("notAttempted", notAttempted);
+
+        window.location.href = "thankyou.html";
+
+    });
+
+}
+const scoreBox = document.getElementById("score");
+
+if (scoreBox) {
+
+    scoreBox.innerHTML = "Score : " + localStorage.getItem("score");
+
+    document.getElementById("correct").innerHTML =
+    "Correct : " + localStorage.getItem("correct");
+
+    document.getElementById("wrong").innerHTML =
+    "Wrong : " + localStorage.getItem("wrong");
+
+    document.getElementById("notAttempted").innerHTML =
+    "Not Attempted : " + localStorage.getItem("notAttempted");
 
 }
