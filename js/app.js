@@ -1,3 +1,4 @@
+import { db, collection, addDoc } from "../firebase.js";
 let responses = {};
 
 const loginBtn = document.getElementById("loginBtn");
@@ -29,7 +30,7 @@ localStorage.setItem("rollNumber",roll);
 
 localStorage.setItem("examCode",code);
 
-window.location.href="instruction.html";
+window.location.href="instructions.html";
 
 });
 
@@ -134,7 +135,16 @@ const submitBtn = document.getElementById("submitBtn");
 
 if (submitBtn) {
 
-    submitBtn.addEventListener("click", function () {
+    submitBtn.addEventListener("click", async function () { 
+        const confirmSubmit = confirm(
+    "Are you sure you want to submit the examination?\n\nYou won't be able to change your answers after submission."
+);
+
+if (!confirmSubmit) {
+
+    return;
+
+}
 
         let score = 0;
         let correct = 0;
@@ -167,29 +177,22 @@ if (submitBtn) {
 
         });
 
-        localStorage.setItem("score", score);
-        localStorage.setItem("correct", correct);
-        localStorage.setItem("wrong", wrong);
-        localStorage.setItem("notAttempted", notAttempted);
+        await addDoc(collection(db, "responses"), {
+
+    candidateName: localStorage.getItem("candidateName"),
+
+    rollNumber: localStorage.getItem("rollNumber"),
+
+    examCode: localStorage.getItem("examCode"),
+
+    responses: responses,
+
+    submittedAt: new Date()
+
+});
 
         window.location.href = "thankyou.html";
 
     });
-
-}
-const scoreBox = document.getElementById("score");
-
-if (scoreBox) {
-
-    scoreBox.innerHTML = "Score : " + localStorage.getItem("score");
-
-    document.getElementById("correct").innerHTML =
-    "Correct : " + localStorage.getItem("correct");
-
-    document.getElementById("wrong").innerHTML =
-    "Wrong : " + localStorage.getItem("wrong");
-
-    document.getElementById("notAttempted").innerHTML =
-    "Not Attempted : " + localStorage.getItem("notAttempted");
 
 }
