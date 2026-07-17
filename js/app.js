@@ -1,6 +1,9 @@
 import { db, collection, addDoc } from "../firebase.js";
+import { exam } from "../data/questions.js";
 let responses = {};
+let currentPage = 1;
 
+const QUESTIONS_PER_PAGE = 10;
 const loginBtn = document.getElementById("loginBtn");
 
 if(loginBtn){
@@ -71,7 +74,7 @@ if (questionsContainer) {
     document.getElementById("examTitle").innerHTML = exam.title;
 
     document.getElementById("examSubject").innerHTML = exam.subject;
-
+/*
     exam.questions.forEach((question, index) => {
 
         responses[question.id] = {
@@ -115,7 +118,69 @@ if (questionsContainer) {
         questionsContainer.appendChild(card);
 
     });
+*/
+function renderPage(page) {
 
+    questionsContainer.innerHTML = "";
+
+    const start = (page - 1) * QUESTIONS_PER_PAGE;
+
+    const end = start + QUESTIONS_PER_PAGE;
+
+    const pageQuestions = exam.questions.slice(start, end);
+
+    pageQuestions.forEach((question, index) => {
+
+        if (!responses[question.id]) {
+
+            responses[question.id] = {
+
+                answer: null
+
+            };
+
+        }
+
+        let card = document.createElement("div");
+
+        card.className = "questionCard";
+
+        card.innerHTML = `
+
+        <h3>Question ${start + index + 1}</h3>
+
+        <p>${question.question}</p>
+
+        <label>
+            <input type="radio" name="q${question.id}" value="A">
+            A. ${question.options[0]}
+        </label>
+
+        <label>
+            <input type="radio" name="q${question.id}" value="B">
+            B. ${question.options[1]}
+        </label>
+
+        <label>
+            <input type="radio" name="q${question.id}" value="C">
+            C. ${question.options[2]}
+        </label>
+
+        <label>
+            <input type="radio" name="q${question.id}" value="D">
+            D. ${question.options[3]}
+        </label>
+
+        <hr>
+
+        `;
+
+        questionsContainer.appendChild(card);
+
+    });
+
+}
+    renderPage(currentPage);
     document.querySelectorAll("input[type='radio']").forEach(radio => {
 
         radio.addEventListener("change", function () {
@@ -177,13 +242,21 @@ if (!confirmSubmit) {
 
         });
 
-        await addDoc(collection(db, "responses"), {
+await addDoc(collection(db, "responses"), {
 
     candidateName: localStorage.getItem("candidateName"),
 
     rollNumber: localStorage.getItem("rollNumber"),
 
     examCode: localStorage.getItem("examCode"),
+
+    score: score,
+
+    correct: correct,
+
+    wrong: wrong,
+
+    notAttempted: notAttempted,
 
     responses: responses,
 

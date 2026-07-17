@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>View Response</title>
+
+<link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+
+<h1>Student Response</h1>
+
+<br>
+
+<h3 id="candidate"></h3>
+
+<h3 id="roll"></h3>
+
+<h3 id="score"></h3>
+
+<hr>
+<div style="margin:20px 0;">
+
+<button onclick="filterQuestions('all')">All</button>
+
+<button onclick="filterQuestions('correct')">✅ Correct</button>
+
+<button onclick="filterQuestions('wrong')">❌ Wrong</button>
+
+<button onclick="filterQuestions('notAttempted')">⏭ Not Attempted</button>
+
+</div>
+<div id="responseContainer"></div>
+
+</div>
+
+</div>
+
+<script type="module" src="view.js"></script>
+
+</body>
+
+</html>
