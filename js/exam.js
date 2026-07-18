@@ -31,7 +31,6 @@ const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 const submitBtn = document.getElementById("submitBtn");
 const reviewBtn = document.getElementById("reviewBtn");
-const markReviewBtn = document.getElementById("markReviewBtn");
 
 function renderPage(page) {
 
@@ -76,19 +75,33 @@ optionsHTML += `
 
         });
 
-        card.innerHTML = `
+card.innerHTML = `
 
-            <h3>Question ${questionIndex + 1}</h3>
+<div class="questionHeader">
 
-            <p>${question.question}</p>
+    <h3>Question ${questionIndex + 1}</h3>
 
-            ${optionsHTML}
+    <button
+        class="reviewBtn ${responses[questionIndex].review ? "active" : ""}"
+        data-question="${questionIndex}">
 
-            <hr>
+        ${responses[questionIndex].review ? "🟢 Reviewed" : "🟡 Review"}
 
+    </button>
 
-        `;
+</div>
 
+<p class="questionText">
+
+    ${question.question}
+
+</p>
+
+${optionsHTML}
+
+<hr>
+
+`;
         questionsContainer.appendChild(card);
 
     });
@@ -107,6 +120,32 @@ optionsHTML += `
         });
 
     });
+document.querySelectorAll(".reviewBtn").forEach(btn => {
+
+    btn.addEventListener("click", function () {
+
+        const id = Number(this.dataset.question);
+
+        responses[id].review = !responses[id].review;
+
+        localStorage.setItem(
+            "responses",
+            JSON.stringify(responses)
+        );
+
+        // Update only this button
+        this.classList.toggle("active", responses[id].review);
+
+        this.innerHTML = responses[id].review
+            ? "🟢 Reviewed"
+            : "🟡 Review";
+
+        // Update only the palette
+        buildQuestionPalette(start, end);
+
+    });
+
+});
     buildQuestionPalette(start, end);
     buildPagePalette();
     
@@ -287,26 +326,3 @@ if(!isNaN(jumpQuestion)){
 
 }
 renderPage(currentPage);
-markReviewBtn.onclick = () => {
-
-    const start = (currentPage - 1) * QUESTIONS_PER_PAGE;
-    const end = Math.min(start + QUESTIONS_PER_PAGE, exam.questions.length);
-
-    for (let i = start; i < end; i++) {
-
-        if (responses[i].answer !== null) {
-
-            responses[i].review = !responses[i].review;
-
-        }
-
-    }
-
-    localStorage.setItem(
-        "responses",
-        JSON.stringify(responses)
-    );
-
-    renderPage(currentPage);
-
-};

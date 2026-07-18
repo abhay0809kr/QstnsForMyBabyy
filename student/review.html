@@ -15,18 +15,62 @@
 
 <div class="container">
 
-<div class="card">
+
 
 <h2>Review Answers</h2>
 
 <hr>
 
-<div id="reviewContainer">
+<div id="reviewDashboard">
 
-</div>
+    <div class="summaryCard">
 
-<hr>
+        <h3>📋 Exam Summary</h3>
 
+        <div class="summaryRow">
+            <span>🟢 Answered</span>
+            <span id="answeredCount">0</span>
+        </div>
+
+        <div class="summaryRow">
+            <span>🔴 Unanswered</span>
+            <span id="unansweredCount">0</span>
+        </div>
+
+        <div class="summaryRow">
+            <span>🟡 Marked for Review</span>
+            <span id="reviewCount">0</span>
+        </div>
+
+        <div class="summaryRow">
+            <span>⚪ Total Questions</span>
+            <span id="totalCount">0</span>
+        </div>
+        
+    </div>
+
+    <div class="reviewActions">
+
+        <button id="viewUnansweredBtn">
+            🔴 View Unanswered
+        </button>
+
+        <button id="viewReviewBtn">
+            🟡 View Marked for Review
+        </button>
+
+        <button id="viewAnsweredBtn">
+            🟢 View Answered
+        </button>
+
+        <button id="viewAllBtn">
+            🔵 View All Answers
+        </button>
+        <button id="omrPreviewBtn">
+        📄 OMR Preview
+        </button>
+
+    </div>
 <button id="backBtn">
 
 ⬅ Back To Exam
@@ -38,6 +82,39 @@
 ✅ Submit Exam
 
 </button>
+</div>
+<div id="searchSection" style="display:none;">
+
+    <input
+        type="number"
+        id="searchQuestion"
+        placeholder="🔍 Enter Question Number (1-100)"
+        min="1"
+        max="100"
+    >
+
+</div>
+<div id="reviewContainer" style="display:none;"></div>
+
+<div id="omrContainer" style="display:none;">
+
+    <h2>📄 OMR Preview</h2>
+
+    <div id="omrContent"></div>
+
+    <br>
+
+    <button id="backFromOmrBtn">
+        ⬅ Back
+    </button>
+
+</div>
+
+</div>
+
+<hr>
+
+
 
 </div>
 

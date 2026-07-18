@@ -2,19 +2,150 @@ import { exam } from "../data/questions.js";
 import { db, collection, addDoc } from "../firebase.js";
 
 const reviewContainer = document.getElementById("reviewContainer");
+const reviewDashboard = document.getElementById("reviewDashboard");
+
+const answeredCount = document.getElementById("answeredCount");
+const unansweredCount = document.getElementById("unansweredCount");
+const reviewCount = document.getElementById("reviewCount");
+const totalCount = document.getElementById("totalCount");
+
+const viewUnansweredBtn = document.getElementById("viewUnansweredBtn");
+const viewReviewBtn = document.getElementById("viewReviewBtn");
+const viewAnsweredBtn = document.getElementById("viewAnsweredBtn");
+const viewAllBtn = document.getElementById("viewAllBtn");
 const backBtn = document.getElementById("backBtn");
 const finalSubmitBtn = document.getElementById("finalSubmitBtn");
-
+const searchSection = document.getElementById("searchSection");
+const searchQuestion = document.getElementById("searchQuestion");
+const omrPreviewBtn = document.getElementById("omrPreviewBtn");
+const omrContainer = document.getElementById("omrContainer");
+const omrContent = document.getElementById("omrContent");
+const backFromOmrBtn = document.getElementById("backFromOmrBtn");
 const responses =
 JSON.parse(localStorage.getItem("responses")) || {};
 
-renderReview();
+loadDashboard();
+viewUnansweredBtn.onclick = () => {
 
-function renderReview(){
+    const unanswered = [];
+
+    exam.questions.forEach((question,index)=>{
+
+        const answer = responses[index]?.answer;
+
+        if(answer===null || answer===undefined){
+
+            unanswered.push(index);
+
+        }
+
+    });
+
+    reviewDashboard.style.display = "none";
+    reviewContainer.style.display = "block";
+    searchSection.style.display = "block";
+    renderReview(unanswered);
+
+};
+viewReviewBtn.onclick = () => {
+
+    const reviewQuestions = [];
+
+    exam.questions.forEach((question, index) => {
+
+        if (responses[index]?.review) {
+
+            reviewQuestions.push(index);
+
+        }
+
+    });
+
+    reviewDashboard.style.display = "none";
+    reviewContainer.style.display = "block";
+    searchSection.style.display = "block";
+    renderReview(reviewQuestions);
+
+};
+viewAnsweredBtn.onclick = () => {
+
+    const answeredQuestions = [];
+
+    exam.questions.forEach((question, index) => {
+
+        const answer = responses[index]?.answer;
+
+        if (answer !== null && answer !== undefined) {
+
+            answeredQuestions.push(index);
+
+        }
+
+    });
+
+    reviewDashboard.style.display = "none";
+    reviewContainer.style.display = "block";
+    searchSection.style.display = "block";
+    renderReview(answeredQuestions);
+
+};
+viewAllBtn.onclick = () => {
+
+    const allQuestions = [];
+
+    exam.questions.forEach((question, index) => {
+
+        allQuestions.push(index);
+
+    });
+
+    reviewDashboard.style.display = "none";
+    reviewContainer.style.display = "block";
+    searchSection.style.display = "block";
+    renderReview(allQuestions);
+
+};
+function loadDashboard(){
+
+    let answered = 0;
+    let unanswered = 0;
+    let review = 0;
+
+    exam.questions.forEach((question,index)=>{
+
+        const answer = responses[index]?.answer;
+
+        if(answer===null || answer===undefined){
+
+            unanswered++;
+
+        }else{
+
+            answered++;
+
+        }
+
+        if(responses[index]?.review){
+
+            review++;
+
+        }
+
+    });
+
+    answeredCount.textContent = answered;
+    unansweredCount.textContent = unanswered;
+    reviewCount.textContent = review;
+    totalCount.textContent = exam.questions.length;
+
+}
+function renderReview(questionIndexes){
 
     reviewContainer.innerHTML = "";
 
-    exam.questions.forEach((question,index)=>{
+    questionIndexes.forEach(index=>{
+
+    const question = exam.questions[index];
 
         const answer =
         responses[index]?.answer;
@@ -33,59 +164,59 @@ else if(answer!==null && answer!==undefined){
 
         const letters=["A","B","C","D"];
 
-        let omr="";
+        reviewContainer.innerHTML += `
 
-        for(let i=0;i<4;i++){
+<div class="reviewCard" data-question="${index + 1}">
 
-            if(answer===i){
+    <div class="reviewTop">
 
-                omr+=`●${letters[i]} `;
+        <h3>
 
-            }
+            ${status} Question ${index+1}
 
-            else{
+        </h3>
 
-                omr+=`○${letters[i]} `;
+    </div>
 
-            }
+    <div class="reviewMiddle">
 
+        ${
+            answer==null
+
+            ? `<span class="notAnswered">
+
+                Not Attempted
+
+               </span>`
+
+            : `<span class="selectedAnswer">
+
+                Selected Answer : ${letters[answer]}
+
+               </span>`
         }
 
-        reviewContainer.innerHTML+=`
+    </div>
 
-        <div class="reviewRow">
+    <button
 
-            <span
-            class="jumpQuestion"
-            data-question="${index}">
+        class="openQuestion"
 
-            ${status}
-            Q${index+1}
+        data-question="${index}"
 
-            </span>
+    >
 
-            <span style="width:50px;display:inline-block;">
+        ➜ Open Question
 
-            ${answer==null?"--":letters[answer]}
+    </button>
 
-            </span>
+</div>
 
-            <span>
-
-            ${omr}
-
-            </span>
-
-        </div>
-
-        <hr>
-
-        `;
-
+`;
     });
 
     document
-    .querySelectorAll(".jumpQuestion")
+    .querySelectorAll(".openQuestion")
     .forEach(item=>{
 
         item.onclick=function(){
@@ -105,17 +236,79 @@ else if(answer!==null && answer!==undefined){
     });
 
 }
+function renderOMR(){
+
+    omrContent.innerHTML = "";
+
+    const letters = ["A","B","C","D"];
+
+    for(let i=0;i<exam.questions.length;i++){
+
+        const answer = responses[i]?.answer;
+
+        omrContent.innerHTML += `
+
+        <div class="omrRow">
+
+            <div class="omrNumber">
+
+                ${i+1}
+
+            </div>
+
+            ${letters.map((letter,index)=>`
+
+                <div class="omrBubble ${answer===index?"selectedBubble":""}">
+
+                    ${letter}
+
+                </div>
+
+            `).join("")}
+
+        </div>
+
+        `;
+
+    }
+
+}
+
 backBtn.onclick = () => {
 
+    if(reviewContainer.style.display==="block"){
+
+        reviewContainer.style.display="none";
+        searchSection.style.display = "none";
+        searchQuestion.value = "";
+        reviewDashboard.style.display="block";
+
+        return;
+
+    }
+
     localStorage.setItem(
+        "returnToReview",
+        "true"
+    );
 
-    "returnToReview",
+    window.location.href="exam.html";
 
-    "true"
+};
+omrPreviewBtn.onclick=()=>{
 
-);
+    reviewDashboard.style.display="none";
 
-window.location.href="exam.html";
+    omrContainer.style.display="block";
+
+    renderOMR();
+
+};
+backFromOmrBtn.onclick = () => {
+
+    omrContainer.style.display = "none";
+
+    reviewDashboard.style.display = "block";
 
 };
 
@@ -180,3 +373,24 @@ finalSubmitBtn.onclick = async () => {
     window.location.href = "thankyou.html";
 
 };
+searchQuestion.addEventListener("input", () => {
+
+    const value = Number(searchQuestion.value);
+
+    document.querySelectorAll(".reviewCard").forEach(card => {
+
+        const questionNumber = Number(card.dataset.question);
+
+        if (!value || questionNumber === value) {
+
+            card.style.display = "block";
+
+        } else {
+
+            card.style.display = "none";
+
+        }
+
+    });
+
+});

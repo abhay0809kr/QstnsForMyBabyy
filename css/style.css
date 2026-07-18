@@ -23,17 +23,23 @@ body{
 
 .container{
 
-    width:100%;
+    width:95%;
+    max-width:1200px;
 
-    display:flex;
+    margin:40px auto;
 
-    justify-content:center;
+    background:#fff;
 
-    align-items:center;
+    border-radius:18px;
+
+    padding:40px;
+
+    box-shadow:0 10px 35px rgba(0,0,0,.08);
+    text-align:center;
 
 }
 
-.card{
+/* .card{
 
     width:650px;
 
@@ -47,7 +53,7 @@ body{
 
     text-align:center;
 
-}
+} */
 
 h1{
 
@@ -155,15 +161,18 @@ width:100%;
 
     text-align:left;
 
-    margin-top:30px;
+    margin-top:18px;
+    padding:10px 14px;
 
 }
 
-.questionCard h3{
+.questionHeader h3{
 
     color:#2563eb;
 
-    margin-bottom:10px;
+    margin:0;
+
+    font-size:18px;
 
 }
 
@@ -217,28 +226,28 @@ width:100%;
 
     align-items:center;
 
-    gap:18px;
+    gap:10px;
 
-    padding:16px 20px;
+    padding:8px 12px;
 
-    margin:14px 0;
+    margin:6px 0;
 
-    border:2px solid #e5e7eb;
+    border:1px solid #e5e7eb;
 
-    border-radius:12px;
+    border-radius:8px;
 
     cursor:pointer;
 
-    transition:.25s;
+    transition:.2s;
 
     background:white;
 
 }
 .option input[type="radio"]{
 
-    width:26px;
+    width:20px;
 
-    height:26px;
+    height:20px;
 
     accent-color:#0d6efd;
 
@@ -249,11 +258,11 @@ width:100%;
 }
 .option span{
 
-    font-size:22px;
+    font-size:16px;
 
     font-weight:500;
 
-    line-height:1.6;
+    line-height:1.35;
 
 }
 .option:hover{
@@ -272,5 +281,284 @@ width:100%;
     border:2px solid #0d6efd;
 
     box-shadow:0 0 10px rgba(13,110,253,.15);
+
+}
+.questionText{
+
+    font-size:18px;
+
+    font-weight:600;
+
+    line-height:1.4;
+
+    margin-bottom:12px;
+
+}
+.questionHeader{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:10px;
+
+}
+.reviewBtn{
+
+    all:unset;
+
+    background:#fff8dc;
+
+    color:#856404;
+
+    border:1px solid #f4c430;
+
+    border-radius:20px;
+
+    padding:5px 12px;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+.reviewBtn:hover{
+
+    background:#ffe082;
+
+}
+.reviewBtn.active{
+
+    background:#ffe082;
+
+    border-color:#f4c430;
+
+}
+.reviewCard{
+
+    background:white;
+
+    border:1px solid #dbe4f0;
+
+    border-radius:12px;
+
+    padding:18px;
+
+    margin:16px 0;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.06);
+
+}
+.reviewTop{
+
+    margin-bottom:14px;
+
+}.reviewMiddle{
+
+    margin-bottom:18px;
+
+    font-size:17px;
+
+}.selectedAnswer{
+
+    color:#16a34a;
+
+    font-weight:600;
+
+}.notAnswered{
+
+    color:#dc2626;
+
+    font-weight:600;
+
+}.openQuestion{
+
+    float:right;
+
+    padding:10px 18px;
+
+    font-size:15px;
+
+}
+.reviewActions{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:18px;
+
+    margin:30px auto;
+
+    width:700px;
+
+    max-width:100%;
+
+}
+
+.reviewActions button{
+
+    width:100%;
+
+}
+
+.reviewActions button:last-child{
+
+    grid-column:1 / 3;
+
+    width:50%;
+
+    justify-self:center;
+
+}
+.bottomButtons{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    margin-top:40px;
+
+}
+
+.bottomButtons button{
+
+    flex:1;
+
+}
+.summaryGrid{
+
+    display:grid;
+
+    grid-template-columns:repeat(4,1fr);
+
+    gap:20px;
+
+    margin:35px 0;
+
+}
+
+.summaryBox{
+
+    padding:25px;
+
+    border-radius:15px;
+
+    color:white;
+
+    text-align:center;
+
+}
+
+.summaryBox h3{
+
+    margin-bottom:10px;
+
+    font-size:18px;
+
+}
+
+.summaryBox h1{
+
+    font-size:42px;
+
+    margin:0;
+
+    color:white;
+
+}
+
+.answeredBox{
+
+    background:#16a34a;
+
+}
+
+.unansweredBox{
+
+    background:#dc2626;
+
+}
+
+.reviewBox{
+
+    background:#d97706;
+
+}
+
+.totalBox{
+
+    background:#2563eb;
+
+}
+#omrContent{
+
+    display:grid;
+
+    grid-template-columns:repeat(2,1fr);
+
+    gap:15px;
+
+    margin-top:30px;
+
+}
+
+.omrRow{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    padding:12px;
+
+    background:#f8fafc;
+
+    border-radius:10px;
+
+}
+
+.omrNumber{
+
+    width:40px;
+
+    font-weight:bold;
+
+}
+
+.omrBubble{
+
+    width:35px;
+
+    height:35px;
+
+    border-radius:50%;
+
+    border:2px solid #2563eb;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-weight:bold;
+
+}
+
+.selectedBubble{
+
+    background:#2563eb;
+
+    color:white;
 
 }
