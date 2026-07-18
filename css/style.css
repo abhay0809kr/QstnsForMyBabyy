@@ -562,3 +562,96 @@ width:100%;
     color:white;
 
 }
+/* ==============================
+   MOBILE RESPONSIVE
+============================== */
+
+@media (max-width:768px){
+
+.container{
+
+    width:98%;
+
+    padding:18px;
+
+    margin:12px auto;
+
+}
+
+.question-palette{
+
+    display:grid;
+
+    grid-template-columns:repeat(5,1fr);
+
+    gap:10px;
+
+}
+
+.question-palette button{
+
+    width:100%;
+
+    height:48px;
+
+    border-radius:12px;
+
+}
+
+.bottomButtons{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:12px;
+
+}
+
+.bottomButtons button{
+
+    width:100%;
+
+    padding:14px;
+
+}
+
+.reviewActions{
+
+    grid-template-columns:1fr;
+
+}
+
+.reviewActions button{
+
+    width:100%;
+
+}
+
+.reviewActions button:last-child{
+
+    width:100%;
+
+    grid-column:auto;
+
+}
+
+.summaryCard{
+
+    width:100%;
+
+}
+
+.questionText{
+
+    font-size:17px;
+
+}
+
+.option{
+
+    padding:12px;
+
+}
+
+}
